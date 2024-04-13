@@ -30,8 +30,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-local_project_path = "C:/api_scorms"
-local_info_scorms = "list_of_scorms.json"
+local_project_path = "/scorms"
+local_info_scorms = "app/list_of_scorms.json"
 encoding="UTF-8"
 
 if not os.path.exists(local_project_path):
@@ -54,7 +54,7 @@ async def get_list_of_scorms():
 
 # Cохранение скорм-пакета 
 @app.post("/upload/")
-async def upload_files(title: str, file: UploadFile = File(...)):
+async def upload_files( file: UploadFile = File(...)):
 
     uuid4 = str(uuid.uuid4())
     new_path = f"{local_project_path}/{uuid4}"
@@ -82,7 +82,7 @@ async def upload_files(title: str, file: UploadFile = File(...)):
 
     data = {
         'id':uuid4,
-        'title':title,
+        'title':file.filename,
         'link': f'{new_path}/index.html',
         'time_download': end_time - start_time,
         'time_render': 0,
