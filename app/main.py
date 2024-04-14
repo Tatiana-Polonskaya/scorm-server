@@ -31,7 +31,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-local_project_path = "/scorms"
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+local_project_path = "/static"
 local_info_scorms = "app/list_of_scorms.json"
 encoding="UTF-8"
 
@@ -128,34 +130,4 @@ async def put_scorm_by_id(scorm_id, time_render: int):
     with open(local_info_scorms, "w") as f:
         json.dump(scorms, f)
     return Response(status_code=status.HTTP_200_OK)
-
-# отправка на облако
-@app.post("/upload_and_extract_to_mail/")
-async def upload_and_extract_to_mail(file: UploadFile = File(...)):
-    new_path = str(uuid.uuid4())
-    client.mkdir(new_path)
-    # Создание временной директории
-    with tempfile.TemporaryDirectory() as temp_dir:
-        temp_zip_path = os.path.join(temp_dir, file.filename)
-        
-        # Сохранение zip-файла во временной директории
-        with open(temp_zip_path, "wb") as temp_zip:
-            temp_zip.write(await file.read())
-        
-        # Разархивация содержимого zip-файла
-        with zipfile.ZipFile(temp_zip_path, 'r') as zip_ref:
-            zip_ref.extractall(temp_dir)
-            
-            # Загрузка содержимого временной директории на облако Mail.ru
-            for root, _, files in os.walk(temp_dir):
-                for file_name in files:
-                    file_path = os.path.join(root, file_name)
-                    with open(file_path, 'rb') as uploaded_file:
-                        remote_path = f"{new_path}/{file_name}"
-                        result = client.upload(remote_path=remote_path, local_path=file_path)
-    print(result)
-    if result:
-        return {"message": "Файлы успешно загружены на облачное хранилище Mail.ru"}
-    else:
-        return {"message": "Ошибка при загрузке файлов на облачное хранилище"}
 
