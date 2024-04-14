@@ -31,7 +31,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.mount("/static", StaticFiles(directory="static", html=True, follow_symlink=True), name="static")
+
 
 local_project_path = "/root/scorm-server/static"
 local_info_scorms = "app/list_of_scorms.json"
@@ -39,6 +39,8 @@ encoding="UTF-8"
 
 if not os.path.exists(local_project_path):
         os.makedirs(local_project_path)
+
+app.mount("/static", StaticFiles(directory=local_project_path, html=True, follow_symlink=True))
 
 #Вычисляет размер папки, количество файлов и количество итераций функции
 def folderSize(path):
