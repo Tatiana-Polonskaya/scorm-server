@@ -20,6 +20,8 @@ origins = [
     "http://localhost",
     "http://localhost:5173",
     "https://localhost:5173",
+    "https://tatiana-polonskaya.github.io/",
+    "https://tatiana-polonskaya.github.io/react-tracking-scorm"
     "https://tatiana-polonskaya.github.io/react-tracking-scorm/"
 ]
 
