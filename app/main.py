@@ -4,7 +4,7 @@ import shutil
 import zipfile
 from fastapi import FastAPI, File, Response, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-
+from fastapi.staticfiles import StaticFiles
 import tempfile
 import uuid
 
