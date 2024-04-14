@@ -31,9 +31,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory="static", html=True, follow_symlink=True), name="static")
 
-local_project_path = "/static"
+local_project_path = "/root/scorm-server/static"
 local_info_scorms = "app/list_of_scorms.json"
 encoding="UTF-8"
 
@@ -86,7 +86,7 @@ async def upload_files( file: UploadFile = File(...)):
     data = {
         'id':uuid4,
         'title':file.filename,
-        'link': f'{new_path}/index.html',
+        'link': f'/static/{uuid4}/index.html',
         'time_download': end_time - start_time,
         'time_render': 0,
         'archive_size': file.size, # bytes
